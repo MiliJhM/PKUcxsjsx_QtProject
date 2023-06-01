@@ -86,11 +86,17 @@
     <QtRcc Include="QtWidgetsApplication1.qrc" />
     <QtUic Include="QStartupMenuWindow.ui" />
     <QtMoc Include="QStartupMenuWindow.h" />
+    <ClCompile Include="ChessPieceBase.cpp" />
+    <ClCompile Include="QGameWindow.cpp" />
     <ClCompile Include="QStartupMenuWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ChessPieceBase.h" />
+    <ClInclude Include="QGameWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

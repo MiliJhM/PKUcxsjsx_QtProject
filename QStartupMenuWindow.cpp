@@ -30,7 +30,7 @@ void QStartupMenuWindow::changeDifficulty() {
 void QStartupMenuWindow::startNew() {
     qDebug("[INFO]: NewGameStarted@Difficulty %d", difficulty);
     emit newStarted(difficulty);
-    startupCompleted();
+    // startupCompleted();
 }
 
 void QStartupMenuWindow::loadGame() {

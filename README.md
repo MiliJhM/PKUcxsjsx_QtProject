@@ -28,6 +28,11 @@
 ### 进度
 
 1. 菜单窗口（√）
+	> 主菜单类：QStartupMenuWindow
+	> 
+	> APIs: 对外Signals：newStarted(int difficulty), loadGame(QFile binSL)， 分别用来传递新游戏难度和存档信息（存档预计二进制读写，也可json）;  
+	> 对外Slots: startupCompleted(); 后续通过在游戏窗口中传递Signal来完成关闭主菜单。
+	> 未实现功能：可从游戏窗口中传递Signal来重新打开主菜单（相当于重新开始一局游戏）。
 
 TODO:
 1. 单位类

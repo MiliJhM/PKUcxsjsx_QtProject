@@ -15,7 +15,16 @@ QStartupMenuWindow::QStartupMenuWindow(QMainWindow *parent)
 }
 
 QStartupMenuWindow::~QStartupMenuWindow()
-{}
+{
+    pass;
+}
+
+void QStartupMenuWindow::connectToGameWindow(QGameWindow* gw) {
+    connect(gw, &QGameWindow::startupCompleted, this, &QStartupMenuWindow::startupCompleted);
+    connect(gw, &QGameWindow::menuReopen, this, &QStartupMenuWindow::reopen);
+    connect(this, &QStartupMenuWindow::newStarted, gw, &QGameWindow::newGameInit);
+    connect(this, &QStartupMenuWindow::gameLoaded, gw, &QGameWindow::loadGame);
+}
 
 void QStartupMenuWindow::changeDifficulty() {
     difficulty++;
@@ -30,7 +39,7 @@ void QStartupMenuWindow::changeDifficulty() {
 void QStartupMenuWindow::startNew() {
     qDebug("[INFO]: NewGameStarted@Difficulty %d", difficulty);
     emit newStarted(difficulty);
-    // startupCompleted();
+    return;
 }
 
 void QStartupMenuWindow::loadGame() {
@@ -43,9 +52,20 @@ void QStartupMenuWindow::loadGame() {
     }
     else
         qDebug("[WARNING]: LoadFailed: loadFileNOTExist");
+    return;
 }
 
-void QStartupMenuWindow::startupCompleted() {
+void QStartupMenuWindow::startupCompleted(QGameWindow& mw) {
     qDebug("[INFO]: StartupCompleted, MenuWindowClosed");
     close();
+    mw.show();
+    return;
 }
+
+void QStartupMenuWindow::reopen(QGameWindow& mw) {
+    qDebug("[INFO]: Exit MainWindow, Menu reopen");
+    mw.close();
+    show();
+    return;
+}
+

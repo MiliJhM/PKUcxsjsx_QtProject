@@ -87,6 +87,7 @@
     <QtUic Include="QGameWindow.ui" />
     <QtUic Include="QStartupMenuWindow.ui" />
     <QtMoc Include="QStartupMenuWindow.h" />
+    <ClCompile Include="ChessBoard.cpp" />
     <ClCompile Include="ChessPieceBase.cpp" />
     <ClCompile Include="QGameWindow.cpp" />
     <ClCompile Include="QStartupMenuWindow.cpp" />
@@ -96,8 +97,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChessBoard.h" />
     <ClInclude Include="ChessPieceBase.h" />
-    <ClInclude Include="QGameWindow.h" />
+    <QtMoc Include="QGameWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

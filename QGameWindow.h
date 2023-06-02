@@ -8,10 +8,11 @@
 #include <QFileDialog>
 #include <QLCDNumber>
 #include "ChessBoard.h"
-
+    
 class QGameWindow :
     public QMainWindow
 {
+    Q_OBJECT
 private:
 
     Ui::QGameWindow ui;
@@ -22,8 +23,14 @@ public:
 
 public slots:
     void newGameInit(const int& difficulty);
+    void loadGame(const QFile& binSL);
+    void pause();
+    void exitToMenu();
+    void saveSL();
     
 signals:
-    void startupCompleted(const QGameWindow& a); // TODO：把这个信号传回MenuWindow，同时利用参数将GameWindow弹出。
+    void startupCompleted(QGameWindow& a);
+    void menuReopen(QGameWindow& a);
+
 };
 

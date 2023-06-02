@@ -46,6 +46,9 @@
     <ClCompile Include="ChessPieceBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ChessBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">
@@ -53,10 +56,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="QGameWindow.h">
+    <ClInclude Include="ChessPieceBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChessPieceBase.h">
+    <ClInclude Include="ChessBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -64,5 +67,10 @@
     <QtUic Include="QGameWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="QGameWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

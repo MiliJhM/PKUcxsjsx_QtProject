@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_QtWidgetsApplication1.h"
+#include "ui_QStartupMenuWindow.h"
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QFile>

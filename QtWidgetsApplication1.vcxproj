@@ -84,6 +84,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="QtWidgetsApplication1.qrc" />
+    <QtUic Include="QGameWindow.ui" />
     <QtUic Include="QStartupMenuWindow.ui" />
     <QtMoc Include="QStartupMenuWindow.h" />
     <ClCompile Include="ChessPieceBase.cpp" />

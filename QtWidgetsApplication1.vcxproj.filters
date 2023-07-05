@@ -26,27 +26,18 @@
     <QtRcc Include="QtWidgetsApplication1.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="QStartupMenuWindow.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtMoc Include="QStartupMenuWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="QStartupMenuWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QGameWindow.cpp">
+    <ClCompile Include="GameWidgetNew.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChessPieceBase.cpp">
+    <ClCompile Include="StartMenuNew.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChessBoard.cpp">
+    <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,21 +47,27 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChessPieceBase.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChessBoard.h">
+    <ClInclude Include="ResSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="QGameWindow.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="QGameWindow.h">
+    <QtMoc Include="StartMenuNew.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="GameWidgetNew.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GameManager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="QtWidgetsApplication1.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

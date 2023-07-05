@@ -32,7 +32,7 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
     <QtInstall>5.15.2_msvc2019</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;multimedia;uitools;widgets;multimediawidgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
@@ -83,23 +83,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="StartMenuNew.cpp" />
     <QtRcc Include="QtWidgetsApplication1.qrc" />
-    <QtUic Include="QGameWindow.ui" />
-    <QtUic Include="QStartupMenuWindow.ui" />
-    <QtMoc Include="QStartupMenuWindow.h" />
-    <ClCompile Include="ChessBoard.cpp" />
-    <ClCompile Include="ChessPieceBase.cpp" />
-    <ClCompile Include="QGameWindow.cpp" />
-    <ClCompile Include="QStartupMenuWindow.cpp" />
+    <ClCompile Include="GameWidgetNew.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChessBoard.h" />
-    <ClInclude Include="ChessPieceBase.h" />
-    <QtMoc Include="QGameWindow.h" />
+    <QtMoc Include="GameManager.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ResSettings.h" />
+    <QtMoc Include="GameWidgetNew.h" />
+    <QtMoc Include="StartMenuNew.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="QtWidgetsApplication1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

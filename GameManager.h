@@ -23,7 +23,8 @@ class GameManager :
     Q_OBJECT
 
 public:
-    GameManager();
+    GameManager(const QString& dir_archive = NULL);
+    GameManager(const int& difficulty);
     void pauseGame();
     void continueGame();
 
@@ -32,7 +33,10 @@ protected:
     int difficulty;
 
     PlayerPiece* player;
+    int playerx, playery;
     void setHpPrinter();
+
+    BotBase* chessboard[8][8]{}; // 左上角视为0，0；右上角视为7，0；
 
     int level;
     int expnow;
@@ -42,6 +46,7 @@ protected:
     QList<int> rougeGenerator();
     void setExpPrinter();
 
+    int enemyGenCount;
     void enemyGenerate();
     
     int pesudoTime;
@@ -51,5 +56,14 @@ protected:
     
     void win();
     void lose();
+
+private:
+    QGraphicsScene* main_sce;
+    QGraphicsScene* end_sce;
+    QTimer* main_timer;
+    QGraphicsPixmapItem* m_background;
+    QPushButton* pb_pause;
+
+
 };
 

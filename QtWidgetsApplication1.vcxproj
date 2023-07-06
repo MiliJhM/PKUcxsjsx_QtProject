@@ -83,7 +83,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BotBase.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="PlayerPiece.cpp" />
     <ClCompile Include="StartMenuNew.cpp" />
     <QtRcc Include="QtWidgetsApplication1.qrc" />
     <ClCompile Include="GameWidgetNew.cpp" />
@@ -94,6 +96,8 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="GameManager.h" />
+    <QtMoc Include="PlayerPiece.h" />
+    <QtMoc Include="BotBase.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResSettings.h" />
     <QtMoc Include="GameWidgetNew.h" />
@@ -101,6 +105,22 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="QtWidgetsApplication1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Images\BotBishop.png" />
+    <Image Include="Images\BotKing.png" />
+    <Image Include="Images\BotKnight.png" />
+    <Image Include="Images\BotPawn.png" />
+    <Image Include="Images\BotQueen.png" />
+    <Image Include="Images\BotRook.png" />
+    <Image Include="Images\Buttons\Rect.png" />
+    <Image Include="Images\Buttons\RectHover.png" />
+    <Image Include="Images\Buttons\Sqr.png" />
+    <Image Include="Images\Buttons\SqrHover.png" />
+    <Image Include="Images\GameBg.png" />
+    <Image Include="Images\MenuBg.png" />
+    <Image Include="Images\PlayerPiece.png" />
+    <Image Include="Images\Shotgun.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

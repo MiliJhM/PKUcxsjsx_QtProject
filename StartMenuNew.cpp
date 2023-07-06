@@ -1,5 +1,6 @@
 #include "StartMenuNew.h"
-#include "ResSettings.h"
+
+const QString FONTDIR = "./Fonts/fusion-pixel-proportional.ttf";
 
 StartMenuNew::StartMenuNew(QWidget *parent)
 	: QGraphicsView(parent)
@@ -14,24 +15,49 @@ StartMenuNew::StartMenuNew(QWidget *parent)
 	// 主菜单场景初始化
 	sce_main = new QGraphicsScene(this);
 	sce_main->setSceneRect(0, 0, 1280, 720);
-	// sce_main->addPixmap("background")
+
+	QPixmap background("./images/MenuBg.png");
+	sce_main->addPixmap(background);
+
+	// 样式表
+	QFile rectPb("./Qss/RectButton.qss");
+	rectPb.open(QFile::ReadOnly);
+	QString style_main_pb;
+	if (rectPb.isOpen()) {
+		style_main_pb = QLatin1String(rectPb.readAll());
+		rectPb.close();
+	}
+	QFile sqrPb("./Qss/SqrButton.qss");
+	sqrPb.open(QFile::ReadOnly);
+	QString style_sqr_pb;
+	if (sqrPb.isOpen()) {
+		style_sqr_pb = QLatin1String(sqrPb.readAll());
+		sqrPb.close();
+	}
+
 
 	start_button = new QPushButton("Start Game", this);
+	start_button->setStyleSheet(style_main_pb);
 	difficulty_button = new QPushButton("Set Difficulty", this);
+	difficulty_button->setStyleSheet(style_main_pb);
 	load_button = new QPushButton("Load Archive", this);
+	load_button->setStyleSheet(style_main_pb);
 	difficulty_label = new QLabel(this);
 	difficulty_label->setNum(difficulty);
-	start_button->move(530, 200);
-	start_button->resize(220, 110);
+	QFont font("fusion pixel proportional", 32, 50);
+	difficulty_label->setFont(font);
+	difficulty_label->setStyleSheet("color:white;");
+	start_button->move(450, 200);
+	start_button->resize(380, 110);
 
-	difficulty_button->move(530, 330);
-	difficulty_button->resize(220, 110);
+	difficulty_button->move(450, 330);
+	difficulty_button->resize(380, 110);
 
-	difficulty_label->move(800, 330);
+	difficulty_label->move(940, 330);
 	difficulty_label->resize(55, 110);
 
-	load_button->move(530, 460);
-	load_button->resize(220, 110);
+	load_button->move(450, 460);
+	load_button->resize(380, 110);
 
 	sce_main->addWidget(start_button);
 	connect(start_button, &QPushButton::clicked, this, &StartMenuNew::startGame);

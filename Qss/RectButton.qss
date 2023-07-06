@@ -1,0 +1,14 @@
+QPushButton {
+    border: none;
+                           
+    color: white;
+    font-size: 32px;
+    font-family: fusion pixel proportional;
+
+    border-color: transparent;  
+    border-image: url(./Images/Buttons/Rect.png);
+}
+
+QPushButton:pressed {
+    border-image: url(./Images/Buttons/RectHover.png);
+}

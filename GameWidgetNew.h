@@ -12,6 +12,7 @@ class GameWidgetNew :
 public:
     GameWidgetNew(QWidget* parent = nullptr);
     void setDiff(int diff);
+    void initMenu();
     void initGameMan();
     void startGameMan();
     void gameEnd();
@@ -25,7 +26,7 @@ private:
 
     int gameDiff = 1;
 
-
+    
 
 };
 

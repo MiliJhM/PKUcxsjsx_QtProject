@@ -40,6 +40,12 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerPiece.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BotBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">
@@ -64,10 +70,60 @@
     <QtMoc Include="GameManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="PlayerPiece.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="BotBase.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="QtWidgetsApplication1.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Images\BotBishop.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\BotKing.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\BotKnight.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\BotPawn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\BotQueen.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\BotRook.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\GameBg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\MenuBg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\PlayerPiece.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\Shotgun.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\Buttons\Rect.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\Buttons\RectHover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\Buttons\Sqr.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\Buttons\SqrHover.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

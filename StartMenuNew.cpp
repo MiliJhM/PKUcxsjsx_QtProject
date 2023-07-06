@@ -27,14 +27,6 @@ StartMenuNew::StartMenuNew(QWidget *parent)
 		style_main_pb = QLatin1String(rectPb.readAll());
 		rectPb.close();
 	}
-	QFile sqrPb("./Qss/SqrButton.qss");
-	sqrPb.open(QFile::ReadOnly);
-	QString style_sqr_pb;
-	if (sqrPb.isOpen()) {
-		style_sqr_pb = QLatin1String(sqrPb.readAll());
-		sqrPb.close();
-	}
-
 
 	start_button = new QPushButton("Start Game", this);
 	start_button->setStyleSheet(style_main_pb);

@@ -2,5 +2,7 @@
 
 PlayerPiece::PlayerPiece(QObject *parent)
 	: QObject(parent)
-{}
+{
+
+}
 

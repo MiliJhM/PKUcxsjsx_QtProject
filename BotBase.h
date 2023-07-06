@@ -29,7 +29,7 @@ protected:
 	qreal hp;
 	qreal atk;
 	int expWhenDie;
-
+	QImage pic;
 
 signals:
 	void botDeath();

@@ -19,16 +19,12 @@ class PlayerPiece  : public QObject, public QGraphicsPixmapItem
 public:
 	PlayerPiece(QObject *parent=nullptr);
 
-	qreal hp;
-	qreal hpmax;
-	qreal def;
-	qreal atk;
-	qreal dodge;
-	int spd; // 玩家每走spd步，bot运行一回合？考虑放入GameManager中
-
 	void moveTo(int x, int y);
 	void hurt(qreal damage);
 	void death();
 	void attack();
+
+private:
+
 
 };

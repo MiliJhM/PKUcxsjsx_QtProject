@@ -47,7 +47,10 @@ GameManager::GameManager(const int& difficulty) :enemyGenCount(0), level(0), dif
 	player->setParent(this);
 	playerx = 4;
 	playery = 7;
-
+	main_sce->addItem(player);
+	player->setScale(0.075);
+	player->setPos(403+62.5*playerx, 125+62.5*playery);
+	player->show();
 	// connect(player, &PlayerPiece::death, this, &GameManager::lose);
 
 	playerHpmax = playerHp = 25;
@@ -85,8 +88,11 @@ GameManager::GameManager(const int& difficulty) :enemyGenCount(0), level(0), dif
 	main_sce->addWidget(pb_restart);
 }
 
+
+
 void GameManager::returnToMenu() {
 	emit gameEnd();
 	this->hide();
 	return;
 }
+

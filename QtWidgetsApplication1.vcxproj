@@ -84,8 +84,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BotBase.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="PlayerPiece.cpp" />
+    <ClCompile Include="Shotgun.cpp" />
     <ClCompile Include="StartMenuNew.cpp" />
     <QtRcc Include="QtWidgetsApplication1.qrc" />
     <ClCompile Include="GameWidgetNew.cpp" />
@@ -95,11 +97,12 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="Shotgun.h" />
     <QtMoc Include="GameManager.h" />
     <QtMoc Include="PlayerPiece.h" />
     <QtMoc Include="BotBase.h" />
+    <QtMoc Include="Bullet.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="ResSettings.h" />
     <QtMoc Include="GameWidgetNew.h" />
     <QtMoc Include="StartMenuNew.h" />
   </ItemGroup>

@@ -37,7 +37,7 @@ signals:
 private:
 	QGraphicsScene* sce_main;
 	int difficulty = 1;
-
+	
 	QPushButton* start_button;
 	QPushButton* difficulty_button;
 	QPushButton* load_button;

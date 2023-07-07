@@ -22,8 +22,7 @@ void GameWidgetNew::setDiff(int diff) {
 }
 
 void GameWidgetNew::initGameMan() {
-	ptr_gameMan = new GameManager(gameDiff);
-	ptr_gameMan->setParent(this);
+	ptr_gameMan = new GameManager(gameDiff, this);
 	connect(ptr_gameMan, &GameManager::gameEnd, this, [=]() {gameEnd(); });
 	connect(ptr_gameMan, &GameManager::restart, this, [=]() {gameEnd(); initGameMan(); startGameMan(); });
 	ptr_gameMan->hide();
@@ -41,5 +40,6 @@ void GameWidgetNew::gameEnd() {
 	ptr_gameMan->hide();
 	ptr_startMenu->show();
 	ptr_startMenu->setFocus();
+	ptr_gameMan->deleteLater();
 	return;
 }

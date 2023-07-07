@@ -5,9 +5,11 @@ const QString FONTDIR = "./Fonts/fusion-pixel-proportional.ttf";
 StartMenuNew::StartMenuNew(QWidget *parent)
 	: QGraphicsView(parent)
 {
+
 	QFontDatabase::addApplicationFont(FONTDIR);
 
 	// ´°¿Ú²ßÂÔ
+	setMouseTracking(true);
 	setFixedSize(1280, 720);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

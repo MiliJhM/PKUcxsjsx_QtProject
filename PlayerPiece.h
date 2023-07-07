@@ -24,7 +24,12 @@ public:
 	void death();
 	void attack();
 
-private:
+signals:
+	void playerHurt();
+	void playerDeath();
+
+protected:
+	QSoundEffect* sfxHurted;
 
 
 };

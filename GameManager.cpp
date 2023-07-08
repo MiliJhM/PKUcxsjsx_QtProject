@@ -338,7 +338,7 @@ void GameManager::levelUp() {
 void GameManager::levelCheck() {
 	while (expnow >= expneed) {
 		expnow -= expneed;
-		expneed = 1.5 * expneed;
+		expneed = 1.2 * expneed;
 		qDebug() << expneed<<' ' << level;
 		level++;
 		levelUp();
@@ -455,7 +455,7 @@ void GameManager::generateRound() {
 BotBase* GameManager::enemyGenerate(const int& kind) {
 	qreal baseHp = (difficulty>3?15:(difficulty*5)) + enemyStrength * 15;
 	qreal baseAtk = difficulty * 2 + enemyStrength * 4;
-	qreal baseExpGiven = 5 + (enemyStrength) * 2;
+	qreal baseExpGiven = 5 + (enemyStrength) * 5;
 	BotBase* ret = nullptr;
 	switch (kind)
 	{

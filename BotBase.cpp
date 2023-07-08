@@ -2,7 +2,11 @@
 
 QSoundEffect* BotBase::sfxEnemyHurt = nullptr;
 
-BotBase::BotBase(int x, int y, qreal hpmax, qreal atk, qreal expgiven, QObject* parent) : posx(x), posy(y), hpmax(hpmax), hp(hpmax), atk(atk), expWhenDie(expgiven), QObject{ parent } {
+BotBase::BotBase(qreal hpmax, qreal atk, qreal expgiven, QObject* parent) : hpmax(hpmax), hp(hpmax), atk(atk), expWhenDie(expgiven), QObject{ parent } {
+	animation = new QPropertyAnimation(this, "pos", parent);
+	animation->setDuration(750);
+	animation->setLoopCount(1);
+	connect(animation, &QPropertyAnimation::finished, this, [=]() {resetPos(); });
 	hurtTimer = new QTimer(this);
 	connect(hurtTimer, &QTimer::timeout, this, [=]() {endHurt(); });
 	effHurted = new QGraphicsColorizeEffect(this);
@@ -13,6 +17,16 @@ BotBase::BotBase(int x, int y, qreal hpmax, qreal atk, qreal expgiven, QObject* 
 	setScale(0.39);
 	setGraphicsEffect(effHurted);
 	return;
+}
+
+void BotBase::setXY(int x, int y) {
+	posx = x;
+	posy = y;
+	return;
+}
+
+bool BotBase::attackableCheck() {
+	return true;
 }
 
 void BotBase::hurt(qreal damage) {
@@ -30,30 +44,29 @@ void BotBase::hurt(qreal damage) {
 }
 
 qreal BotBase::attack(const QPointF& targ) {
-	QPointF nowPos = pos(), posDist;
-	posDist = targ - nowPos;
-	QTimer timer;
-	int cnt=0;
-	while (cnt<10) {
-		if (timer.isActive()) {
-			continue;
-		}
-		cnt++;
-		timer.start(10 / cnt);
-		moveBy(posDist.x()/10, posDist.y() / 10);
-	}
-	cnt = 0;
-	while (cnt < 10) {
-		if (timer.isActive()) {
-			continue;
-		}
-		cnt++;
-		timer.start(10 / cnt);
-		moveBy(( - posDist.x()) / 10, (-posDist.y()) / 10);
-	}
+	qDebug() << "attack" << targ;
+	animation->setStartValue(pos());
+	posKeeper = pos();
+	animation->setEndValue(targ);
+	animation->setEasingCurve(QEasingCurve::InExpo);
+	animation->start();
 	return atk;
+}
+
+void BotBase::resetPos() {
+	animation->setStartValue(pos());
+	animation->setEndValue(posKeeper);
+	animation->setEasingCurve(QEasingCurve::OutExpo);
+	animation->start();
 }
 
 void BotBase::endHurt() {
 	effHurted->setStrength(0);
+}
+
+void BotBase::moveToEffect(int x, int y) {
+	animation->setStartValue(pos());
+	animation->setEndValue(QPointF(390 + x * 62.5, 138+y*62.5));
+	animation->start();
+	setXY(x, y);
 }

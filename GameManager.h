@@ -47,12 +47,14 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void playerMove(int newX, int newY);
-
+    void weaponPosUpd();
     void fireCd();
 
     int difficulty;
 
+
     PlayerPiece* player;
+    QPropertyAnimation* animation;
     Shotgun* weapon;
     int playerx, playery;
 
@@ -79,22 +81,19 @@ protected:
     void setAllPrinter();
 
     int enemyGenCount;
-    BotBase* enemyGenerate(int& sum);
+    BotBase* enemyGenerate(const int& kind);
     void enemyDeathProcess(const int& expWhenDie, int x, int y);
 
 
     int killCounter = 0;
 
     int pesudoTime = 0;
-    int enemyRound = 0;
+    int enemyStrength = 0;
 
-    int normalRoundTime = 5;
-    int eliteRoundTime = 3;
-    int generateRoundTime = 10;
+    int RoundTime;
 
     void timerRun();
-    void normalMoveRound();
-    void eliteMoveRound();
+    void moveRound();
     void generateRound();
     
     void win();
@@ -120,6 +119,6 @@ private:
     QLabel* lb_expnow;
     QLabel* lb_killCounter;
     QLabel* lb_diff;
-
+    QPointF targKeeper;
 };
 

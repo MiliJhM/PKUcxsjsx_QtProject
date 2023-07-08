@@ -12,24 +12,28 @@
 #include <QSoundEffect>
 #include <QUrl>
 #include <QGraphicsEffect>
-
+#include <QPropertyAnimation>
 class BotBase : public QObject, public QGraphicsPixmapItem
 {
 	Q_OBJECT
+	Q_PROPERTY(QPointF pos READ pos WRITE setPos)
 
 public:
-	BotBase(int x, int y, qreal hpmax, qreal atk, qreal expgiven, QObject* parent=nullptr);
+	BotBase(qreal hpmax, qreal atk, qreal expgiven, QObject* parent=nullptr);
+	void setXY(int x, int y);
 	bool attackableCheck();
 	qreal attack(const QPointF& targ);
 	void moveRound();
 	void hurt(qreal damage);
 	void endHurt();
-
+	void resetPos();
 	static QSoundEffect* sfxEnemyHurt;
 	QGraphicsColorizeEffect *effHurted;
 	QTimer* hurtTimer;
+	QPropertyAnimation* animation;
 
 protected:
+	QPointF posKeeper;
 	qreal hpmax;
 	qreal hp;
 	qreal atk;
@@ -37,6 +41,8 @@ protected:
 	QPixmap pic;
 	int posx;
 	int posy;
+
+
 
 signals:
 	void botDeath(const int& expWhenDie, int x, int y);

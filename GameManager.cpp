@@ -29,9 +29,15 @@ GameManager::GameManager(const QString& dir_archive):enemyGenCount(0), level(0) 
 	playerx = 4;
 	playery = 7;
 
+
 	// connect(player, &PlayerPiece::death, this, &GameManager::lose);
 
 	//
+}
+
+void GameManager::weaponPosUpd() {
+	weapon->updatePos(); weapon->show();
+	return;
 }
 
 GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView(parent), enemyGenCount(0), level(0), difficulty(difficulty) {
@@ -65,6 +71,12 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 	player->setScale(0.075);
 	player->setPos(403+62.5*playerx, 125+62.5*playery);
 	player->show();
+
+	animation = new QPropertyAnimation(player, "pos", this);
+	animation->setDuration(750);
+	animation->setLoopCount(1);
+	animation->setEasingCurve(QEasingCurve::InOutExpo);
+	connect(animation, &QPropertyAnimation::finished, this, &GameManager::weaponPosUpd);
 	// connect(player, &PlayerPiece::death, this, &GameManager::lose);
 
 	sfxMove = new QSoundEffect(this);
@@ -201,7 +213,7 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 	lb_diff->setNum(difficulty);
 	lb_diff->setStyleSheet("color:white;");
 	lb_diff->move(1050, 395);
-	main_sce->addWidget(lb_diff);
+	// main_sce->addWidget(lb_diff);
 
 	connect(player, &PlayerPiece::playerHurt, this, [=]() {setHpPrinter(); });
 
@@ -210,11 +222,13 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 	weapon->setGraphicsEffect(effHurted);
 	main_sce->addItem(weapon);
 
-	chessboard[0][0] = new BotBase(0, 0, 100, 2, 1500, this);
+	RoundTime = difficulty > 1 ? 6 : 8;
+
+	chessboard[0][0] = new BotBase(100, 2, 1500, this);
+	chessboard[0][0]->setXY(0, 0);
 	chessboard[0][0]->setPos(390, 138);
 	connect(chessboard[0][0], &BotBase::botDeath, this, &GameManager::enemyDeathProcess);
 	main_sce->addItem(chessboard[0][0]);
-
 }
 
 void GameManager::enemyDeathProcess(const int& expWhenDie, int x, int y) {
@@ -222,6 +236,8 @@ void GameManager::enemyDeathProcess(const int& expWhenDie, int x, int y) {
 	expGet(expWhenDie);
 	setAllPrinter();
 	chessboard[x][y] = nullptr;
+	if (killCounter % 10 == 0)
+		enemyStrength++;
 }
 
 void GameManager::setAllPrinter() {
@@ -299,30 +315,114 @@ void GameManager::expGet(const int& x) {
 }
 
 void GameManager::timerRun() {
-	if (pesudoTime % normalRoundTime == 0) {
-		//normalMoveRound();
+	if (pesudoTime % RoundTime == 0) {
+		moveRound();
+		generateRound();
 	}
-	if (pesudoTime % eliteRoundTime == 0) {
-		//eliteMoveRound();
-	}
-	if (pesudoTime % generateRoundTime == 0) {
-		//generateRound();
-	}
+	qDebug() << pesudoTime;
 	pesudoTime++;
 }
 
-void GameManager::generateRound() {
-	int enemySum = 10 + difficulty * 2;
+void GameManager::moveRound() {
+	qDebug() << "moveRound";
+	int y = 7;
+	int x = 7;
+	for (; y >= 0; y--) {
+		for (x = 7; x >= 0; x--) {
+			if (chessboard[x][y] != nullptr) {
+				qDebug() << "enemy" << x << ' ' << y;
+				BotBase*& enemy = chessboard[x][y];
+				if (enemy->attackableCheck()) {
+					qreal damage = enemy->attack(player->pos());
+					playerHp -= (damage - playerDef)>0? (damage - playerDef):0;
+					player->hurt(damage - playerDef);
+					if (playerHp <= 0) {
+						player->death();
+					}
+					setHpPrinter();
+				}
+				else {
+					enemy->moveRound();
+				}
+			}
+		}
+	}
+}
 
+void GameManager::generateRound() {
+	qDebug() << "generateRound";
+	int enemySum = 1 + (difficulty > 3 ? 1 : 0) + (enemyStrength > 3 ? 1 : 0);
+	int knightP = 0 + (enemyStrength > 0 ? 20 : 0);
+	int kingP = 0 + (enemyStrength > 8 ? 20 : 0);
+	int queenP = 0 + (enemyStrength > 5 ? 10 : 0);
+	int rookP = 0 + (enemyStrength > 2 ? 10 : 0);
+	int bishopP = 0 + (enemyStrength > 2 ? 20 : 0);
+	while (enemySum--) {
+		BotBase* ret = nullptr;
+		int randomResult = QRandomGenerator::global()->bounded(1, 100);
+		bool generated = 0;
+		randomResult -= knightP;
+		if (randomResult <= 0 && !generated) { ret = enemyGenerate(1); generated = 1; }
+		randomResult -= rookP;
+		if (randomResult <= 0 && !generated) { ret = enemyGenerate(2); generated = 1; }
+		randomResult -= bishopP;
+		if (randomResult <= 0 && !generated) { ret = enemyGenerate(3); generated = 1; }
+		randomResult -= queenP;
+		if (randomResult <= 0 && !generated) { ret = enemyGenerate(4); generated = 1; }
+		randomResult -= kingP;
+		if (randomResult <= 0 && !generated) { ret = enemyGenerate(5); generated = 1; }
+		if (!generated) ret = enemyGenerate(0);
+
+		qDebug() << "generate a bot" << hex << unsigned(ret);
+		QVector<int> vec{0, 1, 2, 3, 4, 5, 6, 7};
+		unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+		std::shuffle(vec.begin(), vec.end(), std::default_random_engine(seed));
+		qDebug() << vec;
+		for (size_t i = 0; i < 8; i++)
+		{
+			BotBase*& tar = chessboard[vec[i]][0];
+			if (tar == nullptr) {
+				ret->setXY(vec[i], 0);
+				tar = ret;
+				tar->setPos(390+vec[i]*62.5, 138);
+				connect(tar, &BotBase::botDeath, this, &GameManager::enemyDeathProcess);
+				qDebug() << "enemy generated at" << vec[i] << ' ' << 0;
+				main_sce->addItem(tar);
+				break;
+			}
+		}
+	}
 	return;
 }
-/*
-BotBase* GameManager::enemyGenerate(int& sum) {
-	int randomResult = QRandomGenerator::global()->bounded(1, 100);
 
-	return ;
+BotBase* GameManager::enemyGenerate(const int& kind) {
+	qreal baseHp = (difficulty>3?15:(difficulty*5)) + enemyStrength * 15;
+	qreal baseAtk = difficulty * 2 + enemyStrength * 4;
+	qreal baseExpGiven = 5 + (enemyStrength) * 5;
+	BotBase* ret = nullptr;
+	switch (kind)
+	{
+	case 0:
+		ret = new BotBase(baseHp, baseAtk, baseExpGiven);
+		break;
+	case 1:
+		ret = new BotBase(baseHp*1.5, baseAtk, baseExpGiven*1.5);
+		break;
+	case 2:
+		ret = new BotBase(baseHp*2, baseAtk*0.5, baseExpGiven*1.5);
+		break;
+	case 3:
+		ret = new BotBase(baseHp*0.2, baseAtk*2, baseExpGiven*1.5);
+		break;
+	case 4:
+		ret = new BotBase(baseHp*0.8, baseAtk*1.2, baseExpGiven*3);
+		break;
+	case 5:
+		ret = new BotBase(baseHp*5, baseAtk*2, baseExpGiven*5);
+		break;
+	}
+	return ret;
 }
-*/
 
 void GameManager::mouseMoveEvent(QMouseEvent *event) {
 	weapon->rotateToCursor(event->pos());
@@ -342,6 +442,9 @@ void GameManager::mousePressEvent(QMouseEvent* event) {
 		int newY = (pt1.y() - 137) / 62.5;
 		if (playerMoveCheck(newX, newY)) {
 			playerMove(newX, newY);
+			if (chessboard[newX][newY] != nullptr) {
+				chessboard[newX][newY]->hurt(99999);
+			}
 			sfxMove->play();
 		}
 		mouseFlag = 0;
@@ -356,7 +459,7 @@ void GameManager::mousePressEvent(QMouseEvent* event) {
 		timerRun();
 		fireTimer->start(1000);
 	}
-
+	// chessboard[0][0]->attack(event->pos());
 	QGraphicsView::mousePressEvent(event);
 }
 
@@ -373,9 +476,16 @@ bool GameManager::playerMoveCheck(int newX, int newY) {
 }
 
 void GameManager::playerMove(int newX, int newY) {
-	player->setPos(403 + 62.5 * newX, 125 + 62.5 * newY);
+	qDebug() << "playerMove";
+	animation->setStartValue(player->pos());
+	targKeeper = QPointF(403 + 62.5 * newX, 125 + 62.5 * newY);
+	animation->setEndValue(targKeeper);
+	weapon->hide();
+	animation->start();
+	fireFlag = 1;
+	fireTimer->start(750);
+	// player->setPos(403 + 62.5 * newX, 125 + 62.5 * newY);
 	playerx = newX, playery = newY;
-	weapon->updatePos();
 	return;
 }
 

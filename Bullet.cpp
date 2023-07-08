@@ -10,7 +10,7 @@ Bullet::Bullet(QPointF pos, qreal angle, qreal damage, int penetration, QGraphic
 	setPos(pos);
 	setRotation(angle);
 	connect(bulletTimerStatic, &QTimer::timeout, this, [=](){enemyHitCheck(); move(); });
-	ptr_sce->addItem(this);
+	// ptr_sce->addItem(this);
 }
 
 void Bullet::enemyHitCheck() {

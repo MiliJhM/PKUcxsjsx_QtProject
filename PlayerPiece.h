@@ -10,26 +10,28 @@
 #include <QMovie>
 #include <QSoundEffect>
 #include <QUrl>
+#include <QGraphicsEffect>
 
 
 class PlayerPiece  : public QObject, public QGraphicsPixmapItem
 {
 	Q_OBJECT
+	Q_PROPERTY(QPointF pos READ pos WRITE setPos)
 
 public:
 	PlayerPiece(QObject *parent=nullptr);
 
-	void moveTo(int x, int y);
 	void hurt(qreal damage);
+	void endHurt();
 	void death();
-	void attack();
 
 signals:
 	void playerHurt();
 	void playerDeath();
 
 protected:
+	QTimer* hurtTimer;
 	QSoundEffect* sfxHurted;
-
+	QGraphicsColorizeEffect* effHurt;
 
 };

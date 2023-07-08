@@ -17,7 +17,7 @@ bool BotRook::attackableCheck(int x1, int y1)
         ret = 1;
         int disx = (x1 - posx) == 0 ? 0 : (x1 - posx) / abs(x1 - posx);
         int disy = (y1 - posy) == 0 ? 0 : (y1 - posy) / abs(x1 - posy);
-        for (int probe = 1; posx + disx * probe == x1 && posy + disy * probe == y1; probe++) {
+        for (int probe = 1; posx + disx * probe != x1 && posy + disy * probe != y1; probe++) {
             if (chessboard[posx + disx * probe][posy + disy * probe] != nullptr) {
                 ret = 0;
                 break;

@@ -455,7 +455,7 @@ void GameManager::generateRound() {
 BotBase* GameManager::enemyGenerate(const int& kind) {
 	qreal baseHp = (difficulty>3?15:(difficulty*5)) + enemyStrength * 15;
 	qreal baseAtk = difficulty * 2 + enemyStrength * 4;
-	qreal baseExpGiven = 5 + (enemyStrength) * 5;
+	qreal baseExpGiven = 50 + (enemyStrength) * 5;
 	BotBase* ret = nullptr;
 	switch (kind)
 	{

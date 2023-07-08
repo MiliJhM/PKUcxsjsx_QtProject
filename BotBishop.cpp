@@ -16,7 +16,7 @@ bool BotBishop::attackableCheck(int x1, int y1)
         ret = 1;
         int disx = (x1 - posx)>0?1:-1;
         int disy = (y1 - posy)>0?1:-1;
-        for (int probe = 1; posx + disx*probe == x1 && posy + disy*probe == y1;probe++) {
+        for (int probe = 1; posx + disx*probe != x1 && posy + disy*probe != y1;probe++) {
             if (chessboard[posx + disx * probe][posy + disy * probe] != nullptr) {
                 ret = 0;
                 break;

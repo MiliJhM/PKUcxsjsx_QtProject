@@ -20,6 +20,12 @@
 #include <string>
 
 #include "BotBase.h"
+#include "BotBishop.h"
+#include "BotKing.h"
+#include "BotKnight.h"
+#include "BotPawn.h"
+#include "BotQueen.h"
+#include "BotRook.h"
 #include "PlayerPiece.h"
 #include "Shotgun.h"
 
@@ -88,14 +94,14 @@ protected:
     int killCounter = 0;
 
     int pesudoTime = 0;
-    int enemyStrength = 0;
+    int enemyStrength = 1;
 
     int RoundTime;
 
     void timerRun();
     void moveRound();
     void generateRound();
-    
+    void enemyMove(int x, int y, int newx, int newy);
     void win();
     void lose();
 

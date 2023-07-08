@@ -115,7 +115,7 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 
 	level = 0;
 	expnow = 0;
-	expneed = 10;
+	expneed = 15;
 
 	enemyGenCount = 0;
 	pesudoTime = 0;
@@ -255,7 +255,7 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 	main_sce->addItem(weapon);
 
 	RoundTime = difficulty > 1 ? 6 : 8;
-
+	timerRun();
 	/*
 	chessboard[0][0] = new BotBase(100, 2, 1500, this);
 	chessboard[0][0]->setXY(0, 0);
@@ -323,7 +323,7 @@ void GameManager::levelUp() {
 	qreal playerHprest = (playerHp / playerHpmax);
 	playerHpmax += 5;
 	playerAtk += 1;
-	if (level % 4 == 0) {
+	if (level % 8 == 0) {
 		playerDef += 1;
 		playerBulletNum += 1;
 	}
@@ -338,7 +338,7 @@ void GameManager::levelUp() {
 void GameManager::levelCheck() {
 	while (expnow >= expneed) {
 		expnow -= expneed;
-		expneed = 1.2 * expneed;
+		expneed = 1.5 * expneed;
 		qDebug() << expneed<<' ' << level;
 		level++;
 		levelUp();
@@ -357,7 +357,21 @@ void GameManager::timerRun() {
 		generateRound();
 	}
 	qDebug() << pesudoTime;
+	char out[8][9]{};
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			out[i][j] = chessboard[i][j] == nullptr ? '.' : '#';
+			
+		}
+		qDebug() << out[i];
+	}
 	pesudoTime++;
+}
+
+void GameManager::enemyMove(int x, int y, int newx, int newy) {
+	chessboard[newx][newy] = chessboard[x][y];
+	chessboard[x][y] = nullptr;
+	return;
 }
 
 void GameManager::moveRound() {
@@ -369,17 +383,20 @@ void GameManager::moveRound() {
 			if (chessboard[x][y] != nullptr) {
 				qDebug() << "enemy" << x << ' ' << y;
 				BotBase*& enemy = chessboard[x][y];
-				if (enemy->attackableCheck()) {
+				if (enemy->attackableCheck(playerx, playery)) {
 					qreal damage = enemy->attack(player->pos());
-					playerHp -= (damage - playerDef)>0? (damage - playerDef):0;
-					player->hurt(damage - playerDef);
-					if (playerHp <= 0) {
-						player->death();
+					int randomResult = QRandomGenerator::global()->bounded(1, 100);
+					if (randomResult > playerDodge) {
+						playerHp -= (damage - playerDef) > 0 ? (damage - playerDef) : 0;
+						player->hurt(damage - playerDef);
+						if (playerHp <= 0) {
+							player->death();
+						}
+						setHpPrinter();
 					}
-					setHpPrinter();
 				}
 				else {
-					//enemy->moveRound();
+					enemy->moveRound(playerx, playery);
 				}
 			}
 		}
@@ -388,12 +405,12 @@ void GameManager::moveRound() {
 
 void GameManager::generateRound() {
 	qDebug() << "generateRound";
-	int enemySum = 1 + (difficulty > 3 ? 1 : 0) + (enemyStrength > 3 ? 1 : 0);
+	int enemySum = 1 + (difficulty > 1 ? 1 : 0) + (enemyStrength > 3 ? 1 : 0) + (difficulty > 3 ? 1 : 0);
 	int knightP = 0 + (enemyStrength > 0 ? 20 : 0);
-	int kingP = 0 + (enemyStrength > 8 ? 20 : 0);
-	int queenP = 0 + (enemyStrength > 5 ? 10 : 0);
+	int kingP = 0 + (enemyStrength > 4 ? 20 : 0);
+	int queenP = 0 + (enemyStrength > 3 ? 10 : 0);
 	int rookP = 0 + (enemyStrength > 2 ? 10 : 0);
-	int bishopP = 0 + (enemyStrength > 2 ? 20 : 0);
+	int bishopP = 0 + (enemyStrength > 1 ? 20 : 0);
 	while (enemySum--) {
 		BotBase* ret = nullptr;
 		int randomResult = QRandomGenerator::global()->bounded(1, 100);
@@ -425,6 +442,7 @@ void GameManager::generateRound() {
 				tar = ret;
 				tar->setPos(390+vec[i]*62.5, 138);
 				connect(tar, &BotBase::botDeath, this, &GameManager::enemyDeathProcess);
+				connect(tar, &BotBase::botMove, this, &GameManager::enemyMove);
 				qDebug() << "enemy generated at" << vec[i] << ' ' << 0;
 				main_sce->addItem(tar);
 				break;
@@ -437,27 +455,27 @@ void GameManager::generateRound() {
 BotBase* GameManager::enemyGenerate(const int& kind) {
 	qreal baseHp = (difficulty>3?15:(difficulty*5)) + enemyStrength * 15;
 	qreal baseAtk = difficulty * 2 + enemyStrength * 4;
-	qreal baseExpGiven = 5 + (enemyStrength) * 5;
+	qreal baseExpGiven = 5 + (enemyStrength) * 2;
 	BotBase* ret = nullptr;
 	switch (kind)
 	{
 	case 0:
-		ret = new BotBase(baseHp, baseAtk, baseExpGiven);
+		ret = new BotPawn(baseHp, baseAtk, baseExpGiven, this, chessboard);
 		break;
 	case 1:
-		ret = new BotBase(baseHp*1.5, baseAtk, baseExpGiven*1.5);
+		ret = new BotKnight(baseHp*1.5, baseAtk, baseExpGiven*1.5, this, chessboard);
 		break;
 	case 2:
-		ret = new BotBase(baseHp*2, baseAtk*0.5, baseExpGiven*1.5);
+		ret = new BotRook(baseHp*2, baseAtk*0.8, baseExpGiven*1.5, this, chessboard);
 		break;
 	case 3:
-		ret = new BotBase(baseHp*0.2, baseAtk*2, baseExpGiven*1.5);
+		ret = new BotBishop(baseHp*0.5, baseAtk*3, baseExpGiven*1.5, this, chessboard);
 		break;
 	case 4:
-		ret = new BotBase(baseHp*0.8, baseAtk*1.2, baseExpGiven*3);
+		ret = new BotQueen(baseHp, baseAtk*1.2, baseExpGiven*3, this, chessboard);
 		break;
 	case 5:
-		ret = new BotBase(baseHp*5, baseAtk*2, baseExpGiven*5);
+		ret = new BotKing(baseHp*5, baseAtk*2, baseExpGiven*5, this, chessboard);
 		break;
 	}
 	return ret;
@@ -474,21 +492,27 @@ void GameManager::mousePressEvent(QMouseEvent* event) {
 	if (sqrt(double((pt2.x() - pt1.x()+20) * (pt2.x() - pt1.x()+20) + (pt2.y() - pt1.y()+35) * (pt2.y() - pt1.y()+35))) <= 30 && !mouseFlag) {
 		mouseFlag = 1;
 		effReadyToMove->setOpacity(0.7);
+		QGraphicsView::mousePressEvent(event);
 		return;
 	}
 	if (mouseFlag) {
+		int oriX = playerx, oriY = playery;
 		int newX = (pt1.x() - 390) / 62.5;
 		int newY = (pt1.y() - 137) / 62.5;
 		if (playerMoveCheck(newX, newY)) {
 			playerMove(newX, newY);
 			if (chessboard[newX][newY] != nullptr) {
-				chessboard[newX][newY]->hurt(99999);
+				chessboard[newX][newY]->hurt(playerAtk*playerBulletNum);
+				if (chessboard[newX][newY] != nullptr) {
+					playerMove(oriX, oriY);
+				}
 			}
 			sfxMove->play();
+			timerRun();
 		}
 		mouseFlag = 0;
 		effReadyToMove->setOpacity(1);
-		timerRun();
+		QGraphicsView::mousePressEvent(event);
 		return;
 	}
 	if(!fireFlag){
@@ -497,9 +521,10 @@ void GameManager::mousePressEvent(QMouseEvent* event) {
 		effHurted->setStrength(0.6);
 		timerRun();
 		fireTimer->start(1000);
+		QGraphicsView::mousePressEvent(event);
+		return;
 	}
 	// chessboard[0][0]->attack(event->pos());
-	QGraphicsView::mousePressEvent(event);
 }
 
 void GameManager::mouseReleaseEvent(QMouseEvent* event) {

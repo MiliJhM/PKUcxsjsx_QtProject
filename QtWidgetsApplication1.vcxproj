@@ -85,6 +85,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BotBase.cpp" />
+    <ClCompile Include="BotBishop.cpp" />
+    <ClCompile Include="BotKing.cpp" />
+    <ClCompile Include="BotKnight.cpp" />
+    <ClCompile Include="BotPawn.cpp" />
+    <ClCompile Include="BotQueen.cpp" />
+    <ClCompile Include="BotRook.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="PlayerPiece.cpp" />
@@ -103,6 +109,12 @@
     <QtMoc Include="PlayerPiece.h" />
     <QtMoc Include="BotBase.h" />
     <QtMoc Include="Bullet.h" />
+    <ClInclude Include="BotBishop.h" />
+    <ClInclude Include="BotKing.h" />
+    <ClInclude Include="BotKnight.h" />
+    <ClInclude Include="BotPawn.h" />
+    <ClInclude Include="BotQueen.h" />
+    <ClInclude Include="BotRook.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="GameWidgetNew.h" />
     <QtMoc Include="StartMenuNew.h" />

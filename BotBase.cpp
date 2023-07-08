@@ -12,9 +12,11 @@ BotBase::BotBase(qreal hpmax, qreal atk, qreal expgiven, QObject* parent) : hpma
 	effHurted = new QGraphicsColorizeEffect(this);
 	effHurted->setColor(QColor(192, 0, 0));
 	effHurted->setStrength(0);
+	/*
 	pic = QPixmap("./Images/BotPawn.png");
 	setPixmap(pic);
 	setScale(0.39);
+	*/
 	setGraphicsEffect(effHurted);
 	return;
 }
@@ -25,8 +27,11 @@ void BotBase::setXY(int x, int y) {
 	return;
 }
 
-bool BotBase::attackableCheck() {
+bool BotBase::attackableCheck(int x1, int y1) {
 	return true;
+}
+
+void BotBase::moveRound(int x1, int y1) {
 }
 
 void BotBase::hurt(qreal damage) {
@@ -65,8 +70,10 @@ void BotBase::endHurt() {
 }
 
 void BotBase::moveToEffect(int x, int y) {
+	posKeeper = QPointF(390 + x * 62.5, 138 + y * 62.5);
 	animation->setStartValue(pos());
-	animation->setEndValue(QPointF(390 + x * 62.5, 138+y*62.5));
+	animation->setEndValue(posKeeper);
 	animation->start();
+	emit botMove(posx, posy, x, y);
 	setXY(x, y);
 }

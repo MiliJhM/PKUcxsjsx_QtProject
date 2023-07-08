@@ -21,9 +21,9 @@ class BotBase : public QObject, public QGraphicsPixmapItem
 public:
 	BotBase(qreal hpmax, qreal atk, qreal expgiven, QObject* parent=nullptr);
 	void setXY(int x, int y);
-	bool attackableCheck();
+	virtual bool attackableCheck(int x1, int y1);
 	qreal attack(const QPointF& targ);
-	void moveRound();
+	virtual void moveRound(int x1, int y1);
 	void moveToEffect(int x, int y);
 	void hurt(qreal damage);
 	void endHurt();
@@ -47,5 +47,6 @@ protected:
 
 signals:
 	void botDeath(const int& expWhenDie, int x, int y);
+	void botMove(int x, int y, int newx, int newy);
 };
 

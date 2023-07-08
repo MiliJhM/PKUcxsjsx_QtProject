@@ -104,8 +104,12 @@ private:
     QGraphicsScene* main_sce;
     QGraphicsScene* end_sce;
     QGraphicsPixmapItem* m_background;
+    QGraphicsPixmapItem* end_m_background;
     QPushButton* pb_pause;
     QPushButton* pb_restart;
+    QPushButton* pb_pause_end;
+    QPushButton* pb_restart_end;
+    QLabel* lb_end;
     QGraphicsOpacityEffect* effReadyToMove;
     QGraphicsColorizeEffect* effHurted;
     

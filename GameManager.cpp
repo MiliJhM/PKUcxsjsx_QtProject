@@ -51,11 +51,20 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 	main_sce->setSceneRect(0, 0, 1280, 720);
 	setScene(main_sce);
 
+	end_sce = new QGraphicsScene(this);
+	end_sce->setSceneRect(0, 0, 1280, 720);
+
 	QPixmap backgroundPixmap("./images/GameBg.png");
 	m_background = new QGraphicsPixmapItem;
 	m_background->setPixmap(backgroundPixmap);
 	m_background->setScale(0.5);
 	main_sce->addItem(m_background);
+
+	QPixmap endBackgroundPixmap("./images/MenuBg.png");
+	end_m_background = new QGraphicsPixmapItem;
+	end_m_background->setPixmap(endBackgroundPixmap);
+	end_m_background->setScale(0.5);
+	end_sce->addItem(end_m_background);
 
 	mainTimer = new QTimer(this);
 	Bullet::bulletTimerStatic = mainTimer;
@@ -77,7 +86,7 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 	animation->setLoopCount(1);
 	animation->setEasingCurve(QEasingCurve::InOutExpo);
 	connect(animation, &QPropertyAnimation::finished, this, &GameManager::weaponPosUpd);
-	// connect(player, &PlayerPiece::death, this, &GameManager::lose);
+	connect(player, &PlayerPiece::playerDeath, this, &GameManager::lose);
 
 	sfxMove = new QSoundEffect(this);
 	sfxMove->setSource(QUrl::fromLocalFile("./Sounds/move.wav"));
@@ -132,10 +141,33 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 	pb_restart->resize(100, 100);
 	main_sce->addWidget(pb_restart);
 
-	QFont titleFont("fusion pixel proportional", 16, 50);
+	pb_pause_end = new QPushButton("Exit");
+	connect(pb_pause_end, &QPushButton::clicked, this, &GameManager::returnToMenu);
+	pb_pause_end->setStyleSheet(style_sqr_pb);
+	pb_pause_end->move(1000, 600);
+	pb_pause_end->resize(100, 100);
+	end_sce->addWidget(pb_pause_end);
+
+	pb_restart_end = new QPushButton("Restart");
+	connect(pb_restart_end, &QPushButton::clicked, this, &GameManager::restart);
+	pb_restart_end->setStyleSheet(style_sqr_pb);
+	pb_restart_end->move(1150, 600);
+	pb_restart_end->resize(100, 100);
+	end_sce->addWidget(pb_restart_end);
+	
+	QFont titleFont("fusion pixel proportional", 64, 100);
+	lb_end = new QLabel();
+	lb_end->setAlignment(Qt::AlignCenter);
+	lb_end->move(320, 180);
+	lb_end->setFont(titleFont);
+	lb_end->resize(640, 360);
+	lb_end->setStyleSheet("color:white;background-color: rgba(255, 255, 255, 10);");
+	
+	end_sce->addWidget(lb_end);
+
 	QFont contFont("fusion pixel proportional", 16, 50);
 
-	lb_hpnow = new QLabel(this);
+	lb_hpnow = new QLabel();
 	std::stringstream ss;
 	ss << playerHp << " / " << playerHpmax;
 	lb_hpnow->setText(ss.str().c_str());
@@ -143,77 +175,77 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 	ss.clear();
 	ss.flush();
 	lb_hpnow->setFont(contFont);
-	lb_hpnow->setStyleSheet("color:white;");
+	lb_hpnow->setStyleSheet("color:white;background-color: transparent;");
 	lb_hpnow->resize(300, 50);
 	lb_hpnow->move(100, 125);
 	main_sce->addWidget(lb_hpnow);
-	lb_atk = new QLabel(this);
+	lb_atk = new QLabel();
 	lb_atk->setFont(contFont);
 	lb_atk->setNum(playerAtk);
-	lb_atk->setStyleSheet("color:white;");
+	lb_atk->setStyleSheet("color:white;background-color: transparent;");
 	lb_atk->resize(100, 50);
 	lb_atk->move(100, 215);
 	main_sce->addWidget(lb_atk);
-	lb_def = new QLabel(this);
+	lb_def = new QLabel();
 	lb_def->setFont(contFont);
 	lb_def->setNum(playerDef);
 	lb_def->resize(100, 50);
-	lb_def->setStyleSheet("color:white;");
+	lb_def->setStyleSheet("color:white;background-color: transparent;");
 	lb_def->move(260, 215);
 	main_sce->addWidget(lb_def);
-	lb_dodge = new QLabel(this);
+	lb_dodge = new QLabel();
 	lb_dodge->setFont(contFont);
 	lb_dodge->setNum(playerDodge);
 	lb_dodge->resize(100, 50);
-	lb_dodge->setStyleSheet("color:white;");
+	lb_dodge->setStyleSheet("color:white;background-color: transparent;");
 	lb_dodge->move(100, 305);
 	main_sce->addWidget(lb_dodge);
-	lb_scAngle = new QLabel(this);
+	lb_scAngle = new QLabel();
 	lb_scAngle->setFont(contFont);
 	lb_scAngle->resize(100, 50);
 	lb_scAngle->setNum(playerScatterAngle);
-	lb_scAngle->setStyleSheet("color:white;");
+	lb_scAngle->setStyleSheet("color:white;background-color: transparent;");
 	lb_scAngle->move(100, 395);
 	main_sce->addWidget(lb_scAngle);
-	lb_bulletNum = new QLabel(this);
+	lb_bulletNum = new QLabel();
 	lb_bulletNum->setFont(contFont);
 	lb_bulletNum->setNum(playerBulletNum);
 	lb_bulletNum->resize(100, 50);
-	lb_bulletNum->setStyleSheet("color:white;");
+	lb_bulletNum->setStyleSheet("color:white;background-color: transparent;");
 	lb_bulletNum->move(260, 395);
 	main_sce->addWidget(lb_bulletNum);
 
-	lb_level = new QLabel(this);
+	lb_level = new QLabel();
 	lb_level->setFont(contFont);
 	lb_level->setNum(level);
 	lb_level->resize(100, 50);
-	lb_level->setStyleSheet("color:white;");
+	lb_level->setStyleSheet("color:white;background-color: transparent;");
 	lb_level->move(1050, 125);
 	main_sce->addWidget(lb_level);
-	lb_expnow = new QLabel(this);
+	lb_expnow = new QLabel();
 	ss << expnow << " / " << expneed;
 	lb_expnow->setFont(contFont);
 	lb_expnow->setText(ss.str().c_str());
 	lb_expnow->resize(250, 50);
-	lb_expnow->setStyleSheet("color:white;");
+	lb_expnow->setStyleSheet("color:white;background-color: transparent;");
 	lb_expnow->move(1050, 215);
 	main_sce->addWidget(lb_expnow);
 	ss.str(std::string());
 	ss.clear();
 	ss.flush();
-	lb_killCounter = new QLabel(this);
+	lb_killCounter = new QLabel();
 	lb_killCounter->setFont(contFont);
 	lb_killCounter->setNum(killCounter);
 	lb_killCounter->resize(100, 50);
-	lb_killCounter->setStyleSheet("color:white;");
+	lb_killCounter->setStyleSheet("color:white;background-color: transparent;");
 	lb_killCounter->move(1050, 305);
 	main_sce->addWidget(lb_killCounter);
-	lb_diff = new QLabel(this);
+	lb_diff = new QLabel();
 	lb_diff->setFont(contFont);
 	lb_diff->setNum(difficulty);
-	lb_diff->setStyleSheet("color:white;");
+	lb_diff->setStyleSheet("color:white;background-color: transparent;");
 	lb_diff->move(1050, 395);
-	// main_sce->addWidget(lb_diff);
+	main_sce->addWidget(lb_diff);
 
 	connect(player, &PlayerPiece::playerHurt, this, [=]() {setHpPrinter(); });
 
@@ -224,11 +256,13 @@ GameManager::GameManager(const int& difficulty, QWidget* parent) : QGraphicsView
 
 	RoundTime = difficulty > 1 ? 6 : 8;
 
+	/*
 	chessboard[0][0] = new BotBase(100, 2, 1500, this);
 	chessboard[0][0]->setXY(0, 0);
 	chessboard[0][0]->setPos(390, 138);
 	connect(chessboard[0][0], &BotBase::botDeath, this, &GameManager::enemyDeathProcess);
 	main_sce->addItem(chessboard[0][0]);
+	*/
 }
 
 void GameManager::enemyDeathProcess(const int& expWhenDie, int x, int y) {
@@ -238,6 +272,9 @@ void GameManager::enemyDeathProcess(const int& expWhenDie, int x, int y) {
 	chessboard[x][y] = nullptr;
 	if (killCounter % 10 == 0)
 		enemyStrength++;
+	if (killCounter >= 200) {
+		win();
+	}
 }
 
 void GameManager::setAllPrinter() {
@@ -342,7 +379,7 @@ void GameManager::moveRound() {
 					setHpPrinter();
 				}
 				else {
-					enemy->moveRound();
+					//enemy->moveRound();
 				}
 			}
 		}
@@ -380,6 +417,8 @@ void GameManager::generateRound() {
 		qDebug() << vec;
 		for (size_t i = 0; i < 8; i++)
 		{
+			if (playerx == vec[i] && playery == 0)
+				continue;
 			BotBase*& tar = chessboard[vec[i]][0];
 			if (tar == nullptr) {
 				ret->setXY(vec[i], 0);
@@ -492,4 +531,14 @@ void GameManager::playerMove(int newX, int newY) {
 void GameManager::fireCd() {
 	fireFlag = 0;
 	effHurted->setStrength(0);
+}
+
+void GameManager::win() {
+	lb_end->setText("You Win!");
+	setScene(end_sce);
+}
+
+void GameManager::lose() {
+	lb_end->setText("You Lose!");
+	setScene(end_sce);
 }

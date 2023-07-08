@@ -4,7 +4,7 @@ QPushButton {
     color: white;
     font-size: 32px;
     font-family: fusion pixel proportional;
-
+    background-color: transparent;
     border-color: transparent;  
     border-image: url(./Images/Buttons/Sqr.png);
 }

@@ -24,6 +24,7 @@ public:
 	bool attackableCheck();
 	qreal attack(const QPointF& targ);
 	void moveRound();
+	void moveToEffect(int x, int y);
 	void hurt(qreal damage);
 	void endHurt();
 	void resetPos();
